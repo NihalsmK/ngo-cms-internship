@@ -1,7 +1,16 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from "../api";
+const response = await api.post("/api/auth/register/", {
+  fullname,
+  email,
+  password,
+  role,
+});
+
 import './Register.css';
 import { useNavigate } from 'react-router-dom';
+
+
 
 const API_BASE = 'https://ngo-cms-internship-production.up.railway.app';
 

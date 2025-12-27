@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from "../api";
+
+const response = await api.post("/api/auth/login/", {
+  email,
+  password,
+});
+
 import './Register.css';
 import { useNavigate } from 'react-router-dom';
 
