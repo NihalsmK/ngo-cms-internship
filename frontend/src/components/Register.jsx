@@ -1,52 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api";
-const response = await api.post("/api/auth/register/", {
-  fullname,
-  email,
-  password,
-  role,
-});
-
-import './Register.css';
-import { useNavigate } from 'react-router-dom';
-
-
-
-const API_BASE = 'https://ngo-cms-internship-production.up.railway.app';
+import "./Register.css";
 
 const Register = () => {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [role, setRole] = useState('donor');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [role, setRole] = useState("donor");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API_BASE}/api/auth/register/`, {
+      const res = await api.post("/api/auth/register/", {
         full_name: fullName,
         email,
         password,
         role,
       });
 
-      setSuccess(res.data?.message || 'Registration successful! Redirecting to login...');
-      setTimeout(() => navigate('/login'), 2000);
+      setSuccess(
+        res.data?.message || "Registration successful! Redirecting to login..."
+      );
+      setTimeout(() => navigate("/login"), 2000);
     } catch (err) {
-      console.error('Register error:', err.response?.data || err.message);
+      console.error("Register error:", err.response?.data || err.message);
 
-      let msg = 'Registration failed';
+      let msg = "Registration failed";
       const d = err.response?.data;
 
-      if (d && typeof d === 'object') {
+      if (d && typeof d === "object") {
         msg =
           d.email?.[0] ||
           d.full_name?.[0] ||
@@ -117,7 +108,7 @@ const Register = () => {
           </div>
 
           <button type="submit" disabled={loading}>
-            {loading ? 'Registering...' : 'Register'}
+            {loading ? "Registering..." : "Register"}
           </button>
         </form>
 

@@ -1,54 +1,62 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import api from "../api";
-
-const response = await api.post("/api/auth/login/", {
-  email,
-  password,
-});
-
-import './Register.css';
-import { useNavigate } from 'react-router-dom';
-
-const API_BASE = 'https://ngo-cms-internship-production.up.railway.app';
+import "./Login.css";
 
 const Login = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccess('');
+    setError("");
     setLoading(true);
 
     try {
-      const res = await axios.post(`${API_BASE}/api/auth/login/`, {
+      const res = await api.post("/api/auth/login/", {
         email,
         password,
       });
 
-      setSuccess('Login successful! Redirecting...');
-      localStorage.setItem('user', JSON.stringify(res.data.user));
-      setTimeout(() => navigate('/dashboard'), 1500);
+      const data = res.data;
+
+      // Normalize what we store, so Dashboard can rely on these keys
+      const user = {
+        full_name: data.full_name || data.fullname || "",
+        email: data.email || email,
+        role: data.role || "", // "donor", "volunteer", "admin"
+        token: data.token || data.access || "",
+      };
+
+      localStorage.setItem("user", JSON.stringify(user));
+      localStorage.setItem("token", user.token);
+
+      navigate("/dashboard");
     } catch (err) {
-      const msg = err.response?.data?.error || 'Login failed';
+      console.error("Login error:", err.response?.data || err.message);
+
+      let msg = "Login failed";
+      const d = err.response?.data;
+
+      if (d && typeof d === "object") {
+        msg = d.detail || d.error || msg;
+      }
+
       setError(msg);
-      console.error('Login error:', err.response?.data || err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="register-container">
-      <div className="register-card">
+    <div className="login-container">
+      <div className="login-card">
         <h2>Login</h2>
+
         {error && <div className="alert alert-danger">{error}</div>}
-        {success && <div className="alert alert-success">{success}</div>}
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
@@ -58,9 +66,10 @@ const Login = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              placeholder="you@example.com"
+              placeholder="john@example.com"
             />
           </div>
+
           <div className="form-group">
             <label>Password</label>
             <input
@@ -68,16 +77,17 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              placeholder="Enter your password"
+              placeholder="Your password"
             />
           </div>
+
           <button type="submit" disabled={loading}>
-            {loading ? 'Logging in...' : 'Login'}
+            {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <p className="login-link">
-          Don&apos;t have an account? <a href="/register">Register here</a>
+        <p className="register-link">
+          Don’t have an account? <a href="/register">Register here</a>
         </p>
       </div>
     </div>
