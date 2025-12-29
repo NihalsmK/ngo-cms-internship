@@ -47,3 +47,19 @@ class LoginSerializer(serializers.Serializer):
             attrs['user'] = user
             return attrs
         raise serializers.ValidationError('Must include email and password')
+    
+
+# Add to existing serializers.py
+from rest_framework import serializers
+from .models import User, Donation, VolunteerTask
+
+class DonationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['full_name', 'email', 'amount', 'created_at']
+
+class VolunteerTaskSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VolunteerTask
+        fields = '__all__'
+
