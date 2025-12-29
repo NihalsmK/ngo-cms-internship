@@ -21,14 +21,15 @@ const Login = () => {
         password,
       });
 
+      // Fix: Extract user data correctly from backend response
       const data = res.data;
+      const userData = data.user || data;  // Handle both formats
 
-      // Normalize what we store, so Dashboard can rely on these keys
       const user = {
-        full_name: data.full_name || data.fullname || "",
-        email: data.email || email,
-        role: data.role || "", // "donor", "volunteer", "admin"
-        token: data.token || data.access || "",
+        full_name: userData.full_name || userData.fullname || "",
+        email: userData.email || email,
+        role: userData.role || "",
+        token: userData.token || "",
       };
 
       localStorage.setItem("user", JSON.stringify(user));
@@ -87,7 +88,7 @@ const Login = () => {
         </form>
 
         <p className="register-link">
-          Don’t have an account? <a href="/register">Register here</a>
+          Don't have an account? <a href="/register">Register here</a>
         </p>
       </div>
     </div>

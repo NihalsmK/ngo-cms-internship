@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from django.contrib.auth import authenticate
 from .serializers import RegisterSerializer, LoginSerializer
 
+
 class RegisterView(APIView):
     def post(self, request):
         serializer = RegisterSerializer(data=request.data)
@@ -14,6 +15,7 @@ class RegisterView(APIView):
                 status=status.HTTP_201_CREATED
             )
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LoginView(APIView):
     def post(self, request):
@@ -26,9 +28,14 @@ class LoginView(APIView):
             if user:
                 if not user.is_active:
                     return Response({"error": "Account is inactive"}, status=status.HTTP_400_BAD_REQUEST)
+                
+                # Return user details directly (no nested "user" wrapper)
                 return Response({
-                    "message": "Login successful",
-                    "user": {"id": user.id, "email": user.email, "full_name": user.full_name, "role": user.role}
+                    "full_name": user.full_name,
+                    "email": user.email,
+                    "role": user.role,
+                    "token": "fake-token-for-now"  # Add real JWT later if needed
                 }, status=status.HTTP_200_OK)
+            
             return Response({"error": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

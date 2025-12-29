@@ -41,7 +41,7 @@ const Dashboard = () => {
     <div className="container mt-5">
       <div className="card">
         <div className="card-header d-flex justify-content-between">
-          <h3>Welcome, {user?.full_name || ""}</h3>
+          <h3>Welcome, {user?.full_name || "User"}</h3>
           <button className="btn btn-danger" onClick={handleLogout}>
             Logout
           </button>
