@@ -9,6 +9,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -20,7 +21,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
 
-    'users',
+'backend.users',
     # add other apps here, e.g. 'donations', 'cms'
 ]
 
