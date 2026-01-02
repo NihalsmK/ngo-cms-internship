@@ -34,7 +34,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'ngo_cms.urls'
+ROOT_URLCONF = "backend.urls"
+
 
 TEMPLATES = [
     {
@@ -52,7 +53,8 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'ngo_cms.wsgi.application'
+WSGI_APPLICATION = "backend.wsgi.application"
+
 
 # ================== DATABASE ==================
 # For quick local dev use SQLite; you can later switch to MySQL per requirement. [file:5]
