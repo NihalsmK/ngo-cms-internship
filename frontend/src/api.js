@@ -13,3 +13,16 @@ export const registerUser = (data) => {
     }
   );
 };
+
+export const loginUser = (data) => {
+  return axios.post(
+    `${API_BASE}/api/auth/login/`,
+    data,
+    {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  );
+};
+
